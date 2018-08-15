@@ -1,8 +1,7 @@
 package main
 
 import (
-	// "fmt"
-	"github.com/nsf/termbox-go"
+// "github.com/nsf/termbox-go"
 )
 
 func check(e error) {
@@ -11,12 +10,34 @@ func check(e error) {
 	}
 }
 
-func draw(x, y int, fg, bg termbox.Attribute, s string) {
-	for _, c := range s {
-		termbox.SetCell(x, y, rune(c), fg, bg)
-		x++
+func increment(counter, max int) int {
+	counter++
+	if counter > max {
+		counter = max - 1
 	}
+	return counter
 }
-func printCursor(x, y int) {
-	termbox.SetCursor(x, y)
+
+func incrementBy(counter, by, max int) int {
+	counter += by
+	if counter > max {
+		counter = max - 1
+	}
+	return counter
+}
+
+func decrement(counter, min int) int {
+	counter--
+	if counter < min {
+		counter = min
+	}
+	return counter
+}
+
+func decrementBy(counter, by, min int) int {
+	counter -= by
+	if counter < min {
+		counter = min
+	}
+	return counter
 }

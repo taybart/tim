@@ -22,6 +22,6 @@ func main() {
 	if fname == "" {
 		panic("Filename must be provided")
 	}
-	go HandleBuffer(fname, bus)
+	go DrawLoop(fname, bus)
 	HandleInput(bus)
 }

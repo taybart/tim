@@ -1,44 +1,24 @@
 package main
 
 import (
-	"github.com/nsf/termbox-go"
-	"io/ioutil"
+// "github.com/nsf/termbox-go"
+// "io/ioutil"
 )
 
-// HandleBuffer Used for navigating buffers
-func HandleBuffer(fileName string, bus chan string) {
-	file, err := ioutil.ReadFile(fileName)
-	check(err)
+type Buffer struct {
+	data  []byte
+	index int
+	mode  string
+}
 
-	width, height := termbox.Size()
-	d := Display{1, 1, width, height, file}
-	for {
-		d.Draw()
-		termbox.Flush()
-		select {
-		case s := <-bus:
-			switch s {
-			case "h":
-				d.col--
-				if d.col < 0 {
-					d.col = 0
-				}
-			case "j":
-				d.row++
-				if d.row > d.height {
-					d.row = d.height - 1
-				}
-			case "k":
-				d.row--
-				if d.row < 0 {
-					d.row = 0
-				}
-			case "l":
-				d.col++
-				if d.col > d.width {
-					d.col = d.width - 1
-				}
-			}
-		}
+func (b *Buffer) Insert(letter byte) {
+	b.data = append(b.data, 0)
+	copy(b.data[b.index+1:], b.data[b.index:])
+	b.data[b.index] = letter
+}
+func (b *Buffer) SetIndex(d Display) {
+	b.index = (d.col - d.m.l) + (d.row-d.m.t)*(d.width-d.m.l-d.m.r)
+	if b.index >= len(b.data) {
+		b.index = len(b.data) - 1
 	}
 }
