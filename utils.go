@@ -4,12 +4,16 @@ import (
 // "github.com/nsf/termbox-go"
 )
 
+// Reducing if statements in code
 func check(e error) {
 	if e != nil {
 		panic(e)
 	}
 }
 
+/*
+	Counting functions
+*/
 func increment(counter, max int) int {
 	counter++
 	if counter > max {

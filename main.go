@@ -9,13 +9,10 @@ import (
 func main() {
 	log.SetLevel(log.LEVELWARN)
 
-	err := termbox.Init()
-	check(err)
+	SetupDisplay()
 	defer termbox.Close()
-	termbox.SetInputMode(termbox.InputEsc | termbox.InputMouse)
-	termbox.SetOutputMode(termbox.OutputNormal)
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
+	// bus := make(chan BusMessage) // command bus
 	bus := make(chan string) // command bus
 
 	fname := os.Args[1]

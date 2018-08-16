@@ -20,10 +20,20 @@ type margin struct {
 	b int
 }
 
+func SetupDisplay() {
+	err := termbox.Init()
+	check(err)
+	termbox.SetInputMode(termbox.InputEsc | termbox.InputMouse)
+	termbox.SetOutputMode(termbox.OutputNormal)
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+}
+
 func (d Display) Draw(b Buffer) {
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 	d.DrawBuffer(b)
 	d.DrawMode(b)
 	d.DrawCursor()
+	termbox.Flush()
 }
 
 // DrawMode displays current modality
@@ -48,6 +58,37 @@ func (d Display) DrawCursor() {
 	termbox.SetCursor(d.col, d.row)
 }
 
+func (d *Display) moveToNext(b Buffer, ch byte) {
+	i := b.index
+	col := d.col
+	for {
+		if b.data[i] == ch && i > b.index {
+			d.col = col + 1
+			b.index = i + 1
+			break
+		}
+		col++
+		i++
+	}
+}
+
+func (d *Display) moveToLast(b Buffer, ch byte) {
+	i := b.index
+	col := d.col
+	for {
+		col--
+		i--
+		if b.data[i] == ch && i < b.index {
+			d.col = col
+			b.index = i
+			break
+		}
+		if col == 0 || i == 0 {
+			break
+		}
+	}
+}
+
 func draw(x, y int, fg, bg termbox.Attribute, s string) {
 	for _, c := range s {
 		termbox.SetCell(x, y, rune(c), fg, bg)
@@ -64,12 +105,13 @@ func DrawLoop(fileName string, bus chan string) {
 
 	width, height := termbox.Size()
 	d := Display{m.t, m.l, width, height, m}
+
+	// lastNonce := 0
 	for {
-		termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 		d.Draw(b)
-		termbox.Flush()
 		select {
 		case s := <-bus:
+			// if s.nonce != lastNonce {
 			switch s {
 			case "h":
 				d.col = decrement(d.col, d.m.l)
@@ -79,10 +121,20 @@ func DrawLoop(fileName string, bus chan string) {
 				d.row = decrement(d.row, d.m.t)
 			case "l":
 				d.col = increment(d.col, d.width)
+			case "w":
+				d.moveToNext(b, ' ')
+			case "b":
+				d.moveToLast(b, ' ')
+			case "e":
+				d.moveToNext(b, ' ')
+				d.col -= 2
+				b.index -= 2
 			case "i":
 				b.Insert('i')
 			}
 			b.SetIndex(d)
+			// lastNonce = s.nonce
+			// }
 		}
 	}
 }
