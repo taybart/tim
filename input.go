@@ -2,10 +2,15 @@ package main
 
 import (
 	"github.com/nsf/termbox-go"
+	"github.com/taybartski/log"
+	"net"
+	"time"
 )
 
 // HandleInput used for pulling user input
 func HandleInput(bus chan string) {
+	socketOutput := make(chan string)
+	go startServer(socketOutput)
 	data := make([]byte, 0, 64)
 inputloop:
 	for {
@@ -20,9 +25,11 @@ inputloop:
 		case termbox.EventRaw:
 			data = data[:beg+ev.N]
 			if string(data) == "q" {
+				termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 				break inputloop
 			}
 			bus <- string(data)
+			socketOutput <- string(data)
 
 			for {
 				ev := termbox.ParseEvent(data)
@@ -32,6 +39,8 @@ inputloop:
 				copy(data, data[ev.N:])
 				data = data[:len(data)-ev.N]
 			}
+		case termbox.EventResize:
+			bus <- "resize"
 		case termbox.EventError:
 			panic(ev.Err)
 		}
