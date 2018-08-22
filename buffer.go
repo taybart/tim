@@ -16,6 +16,7 @@ func (b *Buffer) Insert(letter byte) {
 	copy(b.data[b.index+1:], b.data[b.index:])
 	b.data[b.index] = letter
 }
+
 func (b *Buffer) SetIndex(d Display) {
 	width, _ := termbox.Size()
 	b.index = (d.col - d.m.l) + (d.row-d.m.t)*(width-d.m.l-d.m.r)

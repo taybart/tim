@@ -100,7 +100,7 @@ func draw(x, y int, fg, bg termbox.Attribute, s string) {
 }
 
 // DrawLoop used for drawing
-func DrawLoop(fileName string, bus chan string) {
+func DrawLoop(fileName string, bus chan interface{}) {
 	defer termbox.Close()
 	file, err := ioutil.ReadFile(fileName)
 	check(err)
@@ -116,7 +116,7 @@ func DrawLoop(fileName string, bus chan string) {
 		select {
 		case s := <-bus:
 			// if s.nonce != lastNonce {
-			switch s {
+			switch s.(string) {
 			case "h":
 				d.col = decrement(d.col, d.m.l)
 			case "j":

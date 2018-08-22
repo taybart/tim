@@ -1,9 +1,5 @@
 package main
 
-import (
-// "github.com/nsf/termbox-go"
-)
-
 // Reducing if statements in code
 func check(e error) {
 	if e != nil {
