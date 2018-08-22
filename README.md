@@ -1,6 +1,12 @@
 # TIM
 Taylor's Vim!
 
+This is in early stages, please feel free to make a PR or comment!
+
+`mkdir -p $GOPATH/src/github.com/taybartski/ && cd $GOPATH/src/github.com/taybartski && git clone https://github.com/taybartski/tim && cd tim && go build`
+
+`./tim test.txt`
+
 ## Concept
 
 Tim is good at word processing, he has a nervous system that lets all parts of him communicate.
