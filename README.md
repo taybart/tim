@@ -57,3 +57,12 @@ func main() {
 
 ## Structure
 ![image of tim](https://github.com/taybartski/tim/raw/master/static/tim.png)
+
+## Channels
+These are the current channels:
+
+* "input"
+* "display"
+* "color"
+* "buffer"
+
