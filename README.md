@@ -1,9 +1,9 @@
 # TIM
-Taylor's Vim!
+taybart's immaculate mangler
 
 This is in early stages, please feel free to make a PR or comment!
 
-`mkdir -p $GOPATH/src/github.com/taybartski/ && cd $GOPATH/src/github.com/taybartski && git clone https://github.com/taybartski/tim && cd tim && go build`
+`mkdir -p $GOPATH/src/github.com/taybart/ && cd $GOPATH/src/github.com/taybart && git clone https://github.com/taybart/tim && cd tim && go build`
 
 `./tim test.txt`
 
